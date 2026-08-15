@@ -49,8 +49,6 @@ The gradient stays underneath as a fallback, so a missing file never leaves a bl
 
 ## Before this goes public
 
-- [ ] **Instagram link** is a placeholder (`https://www.instagram.com/`) — search for
-      `TODO` in `index.html` and swap in the real profile, or remove the button.
 - [ ] **Trading hours** are listed as Mon–Fri 9 am – 6 pm. Sources conflicted
       (Google said "opens 9 am Fri", the delivery listing said "Fri 9:30 am – 5:45 pm"),
       and only Friday was ever explicitly stated. Confirm the full week with the owner.
