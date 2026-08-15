@@ -188,10 +188,18 @@ ul{margin:0; padding:0; list-style:none;}
 .nav__cta{display:flex; align-items:center; gap:10px; flex:none;}
 
 @media (max-width:940px){ .nav__links{display:none;} }
+/* Let the wordmark shrink and ellipsis rather than push the CTA off-screen */
+@media (max-width:560px){
+  .brand{flex:1 1 auto; min-width:0;}   /* overrides flex:none so it can shrink */
+  .brand__text{min-width:0;}
+  .brand__name{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+}
 @media (max-width:420px){
-  .nav{height:66px;}
+  .nav{height:66px; gap:12px;}
   .brand__sub{display:none;}
-  .nav__cta .btn{padding:10px 16px; font-size:.84rem;}
+  .brand__name{font-size:1.02rem;}
+  .brand__mark{width:34px; height:34px; border-radius:10px; font-size:1.05rem;}
+  .nav__cta .btn{padding:10px 14px; font-size:.82rem;}
 }
 
 /* ============================================================
@@ -355,7 +363,7 @@ ul{margin:0; padding:0; list-style:none;}
    MENU
    ============================================================ */
 .menu-grid{
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(272px, 1fr));
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(min(272px, 100%), 1fr));
   gap:clamp(16px, 2.2vw, 26px);
 }
 .dish{
@@ -471,7 +479,7 @@ ul{margin:0; padding:0; list-style:none;}
    ============================================================ */
 .reviews{background:var(--cream);}
 .reviews__grid{
-  display:grid; grid-template-columns:repeat(auto-fit, minmax(288px, 1fr));
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(min(288px, 100%), 1fr));
   gap:clamp(16px, 2.2vw, 24px);
 }
 .review{
@@ -515,7 +523,7 @@ ul{margin:0; padding:0; list-style:none;}
    GOOD TO KNOW
    ============================================================ */
 .know{background:var(--white); border-top:1px solid var(--line);}
-.know__grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:clamp(18px, 2.4vw, 28px);}
+.know__grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap:clamp(18px, 2.4vw, 28px);}
 .know__item{padding:24px; background:var(--cream); border-radius:var(--r); border:1px solid var(--line);}
 .know__item h3{font-family:var(--sans); font-size:.72rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--chilli); margin-bottom:12px;}
 .know__item ul{display:grid; gap:7px;}
@@ -602,12 +610,20 @@ ul{margin:0; padding:0; list-style:none;}
   *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
 }
 
+/* Standalone buttons outside a .btn-row need to go full width before they run out of room */
+@media (max-width:560px){
+  .menu-foot .btn, .sec-head--split .btn, .reviews__foot .btn{width:100%;}
+  .menu-foot{text-align:left;}
+}
+
 /* Very small screens */
 @media (max-width:380px){
   body{font-size:16px;}
-  .btn{padding:14px 20px; font-size:.9rem;}
+  .btn{padding:14px 18px; font-size:.9rem; white-space:normal; text-align:center; line-height:1.3;}
   .btn-row{gap:10px;}
   .btn-row .btn{flex:1 1 100%;}
+  .stat b{font-size:clamp(1.45rem, 7vw, 2rem);}
+  .stat{padding-inline:10px;}
 }
 </style>
 </head>
