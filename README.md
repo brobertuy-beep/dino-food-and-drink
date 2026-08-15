@@ -1,4 +1,4 @@
-# Dino Food &amp; Drink — landing page
+# Dino Food &amp; Drink landing page
 
 A single-file, high-conversion landing page for **Dino Food & Drink**, a family-run Vietnamese
 kitchen at Shop 2, 466 Boundary Street, Spring Hill QLD 4000.
@@ -7,7 +7,7 @@ kitchen at Shop 2, 466 Boundary Street, Spring Hill QLD 4000.
 
 ## What it is
 
-One self-contained `index.html` — no build step, no dependencies, no framework. Open the file
+One self-contained `index.html` with no build step, no dependencies and no framework. Open the file
 directly in a browser or drop it on any static host.
 
 - Hero with rating proof and three primary CTAs (order / call / directions)
@@ -19,7 +19,7 @@ directly in a browser or drop it on any static host.
 - Fraunces + Inter via Google Fonts; everything else is inline
 
 Verified with no horizontal overflow at 375px, 768px and 1280px. Honours
-`prefers-reduced-motion`. Scroll reveals are progressive enhancement — content stays
+`prefers-reduced-motion`. Scroll reveals are progressive enhancement, so content stays
 visible if JS fails.
 
 ## Local preview
@@ -49,9 +49,9 @@ The gradient stays underneath as a fallback, so a missing file never leaves a bl
 
 ## Before this goes public
 
-- [ ] **Trading hours** are listed as Mon–Fri 9 am – 6 pm. Sources conflicted
-      (Google said "opens 9 am Fri", the delivery listing said "Fri 9:30 am – 5:45 pm"),
-      and only Friday was ever explicitly stated. Confirm the full week with the owner.
+- [ ] **Trading hours** are listed as Monday to Friday, 9 am to 6 pm. Sources conflicted
+      (Google said "opens 9 am Fri", the delivery listing said "Fri 9:30 am to 5:45 pm"),
+      and only Friday was ever explicitly stated. Confirm the full week with the owners.
       Hours appear in two places: the Visit card and the JSON-LD block.
 - [ ] **Canonical URL** points at the GitHub Pages address. Update it, plus the two
       `og:`/`twitter:` URL tags, if this moves to a custom domain.
