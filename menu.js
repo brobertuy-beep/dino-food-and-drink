@@ -75,8 +75,7 @@ window.DINO_MENU = {
         { name: "Roasted Pork Banh Mi", vi: "Bánh Mì Heo Quay", price: "$11.50" },
         { name: "Lemongrass Beef Banh Mi", vi: "Bánh Mì Thịt Bò", price: "$10.50" },
         { name: "Lemongrass Chicken Banh Mi", vi: "Bánh Mì Gà", price: "$10" },
-        // CONFIRM: price was unreadable in the menu photo
-        // { name: "Grilled Pork Banh Mi", vi: "Bánh Mì Thịt Nướng", price: "$" },
+        { name: "Grilled Pork Banh Mi", vi: "Bánh Mì Thịt Nướng", price: "$10" },
         { name: "Grilled Pork Meatball Banh Mi", vi: "Bánh Mì Nem Nướng", price: "$9.50" },
         { name: "Vegan Banh Mi", vi: "Bánh Mì Chay", price: "$9.50" },
         { name: "Egg Banh Mi", vi: "Bánh Mì Trứng", price: "$9" }
@@ -113,12 +112,11 @@ window.DINO_MENU = {
 
     { title: "Appetisers",
       items: [
-        // CONFIRM: prices were unreadable in the menu photo
-        // { name: "Pork Spring Rolls", vi: "Chả Giò Thịt Heo", price: "$" },
-        // { name: "Vegan Spring Rolls", vi: "Chả Giò Chay", price: "$" },
-        // { name: "Fried Wontons", vi: "Hoành Thánh Chiên", price: "$" },
+        { name: "Pork Spring Rolls", vi: "Chả Giò Thịt Heo", price: ["3 for $7.60", "4 for $8"] },
+        { name: "Vegan Spring Rolls", vi: "Chả Giò Chay", price: ["3 for $7.60", "4 for $8"] },
+        { name: "Fried Wontons", vi: "Hoành Thánh Chiên", price: ["4 for $6", "6 for $8"] },
         { name: "Meatball Skewers", vi: "Nem Nướng", price: ["1 for $5", "2 for $9.50"] },
-        { name: "Chips", vi: "Khoai Tây Chiên", price: "$5" }
+        { name: "Hot Chips", vi: "Khoai Tây Chiên", price: "$5" }
       ] },
 
     { title: "Extras",
