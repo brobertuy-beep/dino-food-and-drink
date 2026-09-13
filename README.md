@@ -7,7 +7,7 @@ kitchen at Shop 2, 466 Boundary Street, Spring Hill QLD 4000.
 
 ## What it is
 
-One self-contained `index.html` with no build step, no dependencies and no framework. Open the file
+`index.html` plus `menu.js` (the menu and prices), with no build step, no dependencies and no framework. Open the file
 directly in a browser or drop it on any static host.
 
 - Hero with rating proof and three primary CTAs (order / call / directions)
@@ -34,6 +34,28 @@ python -m http.server 8000
 
 Hosted with GitHub Pages from the `main` branch, root folder.
 Settings → Pages → Source: *Deploy from a branch* → `main` / `/ (root)`.
+
+## Changing prices and dishes
+
+Everything on the menu, including the six featured cards and the full in-store menu, comes
+from one small file: **`menu.js`**. You never need to touch `index.html` to change a price.
+
+**On GitHub, from any browser:**
+
+1. Open the repository and click **`menu.js`**.
+2. Click the **pencil icon** (Edit this file) at the top right.
+3. Find the dish and change the price between the quote marks, e.g. `"$11.50"` to `"$12"`.
+   Keep the quote marks and the comma at the end of the line.
+4. Scroll down, click **Commit changes**.
+5. The website updates in about a minute. Refresh the page to check.
+
+Instructions for adding, hiding and two-size dishes are written at the top of `menu.js`.
+
+If the menu area shows "Our menu is being updated", a quote mark or comma was deleted by
+accident. Open the file's **History**, compare with the previous version, and put it back.
+
+To edit, a person needs a GitHub account that has been added under
+**Settings → Collaborators** on this repository.
 
 ## Adding photography
 
