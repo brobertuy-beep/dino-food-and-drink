@@ -1,6 +1,17 @@
 /* =====================================================================
-   DINO FOOD & DRINK: MENU AND PRICES
-   This is the only file you need to change to update the website menu.
+   GOOGLE SHEET LINK
+   Paste the sheet's "Publish to web" CSV link between the quote marks.
+   When a link is set, the website reads the menu and prices from the
+   Google Sheet, so change prices there. The list further down is then
+   only a backup, shown if the sheet cannot be reached.
+   Leave it as "" to use the list below instead.
+   ===================================================================== */
+window.DINO_SHEET_URL = "";
+
+
+/* =====================================================================
+   DINO FOOD & DRINK: MENU AND PRICES (backup, or main menu if no sheet)
+   Only needed if there is no Google Sheet link above.
 
    HOW TO CHANGE A PRICE
    1. Find the dish below.

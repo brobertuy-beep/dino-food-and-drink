@@ -1093,16 +1093,34 @@ ul{margin:0; padding:0; list-style:none;}
 <script src="menu.js"></script>
 <script>
 (function(){
-  // Build the menu from menu.js before the reveal observer collects elements
-  (function renderMenu(){
-    var featuredEl = document.getElementById('featured-menu');
-    var listEl = document.getElementById('full-menu-list');
-    var fallback = '<p class="menu-error">Our menu is being updated. Call <a href="tel:0468595689">0468 595 689</a> for today\'s prices.</p>';
-    var M = window.DINO_MENU;
-    var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
-    var tints = ['#E8873C,#C4342C', '#D8A33F,#8A5A1E', '#3E8C68,#234F3C', '#C4342C,#7C221C', '#E8873C,#B5641F', '#5A3A26,#241A14'];
+  var featuredEl = document.getElementById('featured-menu');
+  var listEl = document.getElementById('full-menu-list');
+  var errorHtml = '<p class="menu-error">Our menu is being updated. Call <a href="tel:0468595689">0468 595 689</a> for today\'s prices.</p>';
+  var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var tints = ['#E8873C,#C4342C', '#D8A33F,#8A5A1E', '#3E8C68,#234F3C', '#C4342C,#7C221C', '#E8873C,#B5641F', '#5A3A26,#241A14'];
 
-    if (!M || !M.featured || !M.sections){ featuredEl.innerHTML = fallback; listEl.innerHTML = ''; return; }
+  // Reveal on scroll. Reusable, because menu content from the Google Sheet arrives after page load.
+  var noMotion = !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io = noMotion ? null : new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        var el = entry.target;
+        var delay = (Array.prototype.indexOf.call(el.parentNode.children, el) % 4) * 70;
+        setTimeout(function(){ el.classList.add('is-in'); }, delay);
+        io.unobserve(el);
+      }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+  function reveal(root){
+    var els = root.querySelectorAll('.reveal:not(.is-in)');
+    els.forEach(function(el){ io ? io.observe(el) : el.classList.add('is-in'); });
+    // Safety net: if anything blocks the observer, show everything anyway.
+    setTimeout(function(){ els.forEach(function(el){ el.classList.add('is-in'); }); }, 2500);
+  }
+
+  // ---------- Menu rendering (same shape whether data comes from the sheet or menu.js)
+  function renderMenu(M){
+    if (!M || !M.featured || !M.sections){ featuredEl.innerHTML = errorHtml; listEl.innerHTML = ''; return false; }
     try {
       featuredEl.innerHTML = M.featured.map(function(d, i){
         var main = d.store
@@ -1140,9 +1158,99 @@ ul{margin:0; padding:0; list-style:none;}
         document.getElementById('hero-dish-note').textContent = 'in store' + (hero.uber ? ' · ' + hero.uber + ' on Uber Eats' : '');
       }
     } catch (e) {
-      featuredEl.innerHTML = fallback; listEl.innerHTML = '';
+      featuredEl.innerHTML = errorHtml; listEl.innerHTML = '';
+      return false;
     }
-  })();
+    reveal(featuredEl); reveal(listEl);
+    return true;
+  }
+
+  // ---------- Google Sheet (published to web as CSV)
+  function parseCSV(text){
+    var rows = [], row = [], field = '', inQuotes = false, c;
+    text = String(text).replace(/^﻿/, '');
+    for (var i = 0; i < text.length; i++){
+      c = text[i];
+      if (inQuotes){
+        if (c === '"'){ if (text[i + 1] === '"'){ field += '"'; i++; } else inQuotes = false; }
+        else field += c;
+      } else if (c === '"') inQuotes = true;
+      else if (c === ','){ row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r'){
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); rows.push(row); row = []; field = '';
+      } else field += c;
+    }
+    if (field !== '' || row.length){ row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  function sheetToMenu(rows){
+    var head = (rows[0] || []).map(function(h){ return String(h).trim().toLowerCase(); });
+    // A sheet that is not published returns a Google sign-in page instead of CSV; this catches it.
+    if (head.indexOf('dish') < 0 || head.indexOf('price') < 0) throw new Error('Sheet is missing the Dish or Price column');
+    var get = function(r, name){ var i = head.indexOf(name); return i < 0 ? '' : String(r[i] == null ? '' : r[i]).trim(); };
+    var isNo = function(v){ return /^(no|n|hide|hidden|false|0)$/i.test(v); };
+    var sections = [], byTitle = {}, featured = [];
+
+    rows.slice(1).forEach(function(r, rowIdx){
+      var name = get(r, 'dish');
+      if (!name || isNo(get(r, 'show'))) return;
+      var prices = [get(r, 'price'), get(r, 'price 2')].filter(Boolean);
+      var uber = get(r, 'uber eats price');
+      var title = get(r, 'section');
+
+      if (title){
+        var key = title.toLowerCase(), s = byTitle[key];
+        if (!s){ s = byTitle[key] = { title: title, items: [] }; sections.push(s); }
+        if (!s.note && get(r, 'section note')) s.note = get(r, 'section note');
+        if (!s.tag && get(r, 'section tag')) s.tag = get(r, 'section tag');
+        if (prices.length) s.items.push({ name: name, vi: get(r, 'vietnamese name'), desc: get(r, 'description'), price: prices.length > 1 ? prices : prices[0] });
+      }
+
+      var feat = get(r, 'featured');
+      if (feat && !isNo(feat) && (prices.length || uber)){
+        var pos = parseFloat(feat);
+        // Cards show the largest serve; "3 for $12" becomes "$12" with "for 3", matching menu.js cards
+        var cardPrice = prices[prices.length - 1] || '', serve = '';
+        var sized = /^(\d+)\s+for\s+(\$\s?[\d.,]+)$/i.exec(cardPrice);
+        if (sized){ cardPrice = sized[2].replace(/\s/g, ''); serve = 'for ' + sized[1]; }
+        featured.push({
+          order: isNaN(pos) ? 1e6 : pos, row: rowIdx, name: name,
+          badge: get(r, 'card label'), desc: get(r, 'card description') || get(r, 'description'),
+          store: cardPrice, serve: serve, uber: uber, liked: get(r, 'card note'),
+          storeOnly: !!(prices.length && !uber)
+        });
+      }
+    });
+
+    featured.sort(function(a, b){ return (a.order - b.order) || (a.row - b.row); });
+    sections = sections.filter(function(s){ return s.items.length; });
+    if (!sections.length && !featured.length) throw new Error('Sheet has no dishes');
+    return { featured: featured.slice(0, 6), sections: sections };
+  }
+
+  function load(url){
+    if (!url){ renderMenu(window.DINO_MENU); return Promise.resolve('menu.js'); }
+    featuredEl.innerHTML = '<p class="menu-error">Loading menu</p>';
+    listEl.innerHTML = '';
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 8000) : null;
+    return fetch(url, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
+      .then(function(text){
+        clearTimeout(timer);
+        if (!renderMenu(sheetToMenu(parseCSV(text)))) throw new Error('Could not render sheet');
+        return 'sheet';
+      })
+      .catch(function(err){
+        clearTimeout(timer);
+        if (window.console) console.warn('Menu: Google Sheet unavailable, showing menu.js instead.', err);
+        renderMenu(window.DINO_MENU);
+        return 'menu.js (fallback)';
+      });
+  }
+  window.DinoMenu = { load: load, parseCSV: parseCSV, sheetToMenu: sheetToMenu };
 
   // Sticky header shadow
   var header = document.querySelector('.site-header');
@@ -1154,28 +1262,8 @@ ul{margin:0; padding:0; list-style:none;}
   var y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
 
-  // Reveal on scroll
-  var items = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    items.forEach(function(el){ el.classList.add('is-in'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry, i){
-      if (entry.isIntersecting){
-        var el = entry.target;
-        var delay = (Array.prototype.indexOf.call(el.parentNode.children, el) % 4) * 70;
-        setTimeout(function(){ el.classList.add('is-in'); }, delay);
-        io.unobserve(el);
-      }
-    });
-  }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
-  items.forEach(function(el){ io.observe(el); });
-
-  // Safety net: if anything blocks the observer, show everything anyway.
-  setTimeout(function(){
-    document.querySelectorAll('.reveal:not(.is-in)').forEach(function(el){ el.classList.add('is-in'); });
-  }, 2500);
+  load(window.DINO_SHEET_URL);
+  reveal(document);
 })();
 </script>
 
