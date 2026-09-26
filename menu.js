@@ -24,7 +24,7 @@ window.DINO_SHEET_URL = "";
      { name: "Chicken Pho", vi: "Phở Gà", price: "$17" },
 
    A dish with two sizes uses square brackets, like this:
-     price: ["2 for $8.40", "3 for $12"]
+     price: ["2 for $9", "3 for $12"]
 
    HOW TO HIDE A DISH
    Put two slashes // at the start of its line. Remove them to show it again.
@@ -94,11 +94,11 @@ window.DINO_MENU = {
 
     { title: "Rice Paper Rolls",
       items: [
-        { name: "Roasted Pork Rice Paper Rolls", vi: "Gỏi Cuốn Heo Quay", price: ["2 for $8.40", "3 for $12"] },
-        { name: "Prawn Rice Paper Rolls", vi: "Gỏi Cuốn Tôm", price: ["2 for $8.40", "3 for $12"] },
-        { name: "Chicken Rice Paper Rolls", vi: "Gỏi Cuốn Thịt Gà", price: ["2 for $8.40", "3 for $12"] },
-        { name: "Beef Rice Paper Rolls", price: ["2 for $8.40", "3 for $12"] },
-        { name: "Vegan Rice Paper Rolls", vi: "Gỏi Cuốn Chay", price: ["2 for $8.40", "3 for $12"] }
+        { name: "Roasted Pork Rice Paper Rolls", vi: "Gỏi Cuốn Heo Quay", price: ["2 for $9", "3 for $12"] },
+        { name: "Prawn Rice Paper Rolls", vi: "Gỏi Cuốn Tôm", price: ["2 for $9", "3 for $12"] },
+        { name: "Chicken Rice Paper Rolls", vi: "Gỏi Cuốn Thịt Gà", price: ["2 for $9", "3 for $12"] },
+        { name: "Beef Rice Paper Rolls", price: ["2 for $9", "3 for $12"] },
+        { name: "Vegan Rice Paper Rolls", vi: "Gỏi Cuốn Chay", price: ["2 for $9", "3 for $12"] }
       ] },
 
     { title: "Rice Dishes",

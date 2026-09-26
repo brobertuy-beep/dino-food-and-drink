@@ -141,10 +141,11 @@ The gradient stays underneath as a fallback, so a missing file never leaves a bl
 
 ## Before this goes public
 
-- [ ] **Trading hours** are listed as Monday to Friday, 9 am to 6 pm. Sources conflicted
-      (Google said "opens 9 am Fri", the delivery listing said "Fri 9:30 am to 5:45 pm"),
-      and only Friday was ever explicitly stated. Confirm the full week with the owners.
-      Hours appear in two places: the Visit card and the JSON-LD block.
+- [x] **Trading hours** confirmed by the owners in September 2026: Monday to Friday 9 am to
+      6 pm, Saturday 10 am to 4 pm, closed Sundays. If they change, update two places in
+      `index.html`: the Visit card and the JSON-LD block near the bottom.
+- [ ] **Google listing hours** may still show the old times. Worth updating there too, since
+      that is where most customers look.
 - [ ] **Canonical URL** points at the GitHub Pages address. Update it, plus the two
       `og:`/`twitter:` URL tags, if this moves to a custom domain.
 - [ ] Add real photography (see above).
