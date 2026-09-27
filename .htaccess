@@ -1,0 +1,34 @@
+# Dino Food & Drink
+# Apache settings for GoDaddy cPanel hosting.
+# If the site ever shows a 500 Internal Server Error after uploading, delete this file
+# and the site will keep working without it.
+
+# Send visitors to the secure https address
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+
+# Friendly page for broken links
+ErrorDocument 404 /404.html
+
+# Make sure accented characters (for example Phở) display correctly
+AddDefaultCharset UTF-8
+
+# Compress text files so pages load faster
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/csv application/javascript application/json image/svg+xml
+</IfModule>
+
+# Caching. The page and menu are kept short so price changes appear quickly.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 10 minutes"
+  ExpiresByType application/javascript "access plus 10 minutes"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
