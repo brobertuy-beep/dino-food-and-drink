@@ -40,6 +40,42 @@ function dino_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'dino_assets' );
 
+/**
+ * Send the temporary GoDaddy address to the real domain, so the site has one
+ * address only. Runs on the front of the site, never in wp-admin, so the
+ * dashboard stays reachable on the temporary address if the domain has trouble.
+ */
+function dino_redirect_temp_domain() {
+	if ( is_admin() || wp_doing_ajax() ) {
+		return;
+	}
+	if ( ( defined( 'DOING_CRON' ) && DOING_CRON ) || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+		return;
+	}
+	if ( empty( $_SERVER['HTTP_HOST'] ) ) {
+		return;
+	}
+
+	$host = strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) );
+	if ( substr( $host, -16 ) !== '.myftpupload.com' ) {
+		return;
+	}
+
+	$home_host = wp_parse_url( home_url(), PHP_URL_HOST );
+	// Only redirect when the real domain is set and differs, so this can never loop.
+	if ( empty( $home_host ) || strtolower( $home_host ) === $host ) {
+		return;
+	}
+
+	$path   = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/';
+	$target = esc_url_raw( 'https://' . $home_host . $path );
+	if ( $target ) {
+		wp_redirect( $target, 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'dino_redirect_temp_domain', 1 );
+
 /** Appearance > Customize > Dino Food & Drink */
 function dino_customize( $wp_customize ) {
 	$wp_customize->add_section( 'dino_settings', array(
