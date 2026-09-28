@@ -265,7 +265,7 @@ ul{margin:0; padding:0; list-style:none;}
 .dot{width:5px; height:5px; border-radius:50%; background:var(--herb); flex:none; box-shadow:0 0 0 4px rgba(46,106,79,.22);}
 
 /* Hero visual: stacked cards. Add a photo by setting --photo on .hero-card__art */
-.hero__visual{position:relative; display:grid; place-items:center; min-height:340px;}
+.hero__visual{position:relative; display:flex; flex-direction:column; align-items:center; gap:22px; min-height:340px;}
 @media (max-width:940px){ .hero__visual{min-height:0;} }
 
 .hero-card{
@@ -313,9 +313,10 @@ ul{margin:0; padding:0; list-style:none;}
 .hero-card__price{font-family:var(--serif); font-weight:800; font-size:1.5rem; letter-spacing:-.03em;}
 .hero-card__note{font-size:.8rem; color:var(--muted); font-weight:500;}
 
+/* Sits below the dish card, never over it, so the dish name and price stay readable */
 .hero-quote{
-  position:absolute; left:-4%; bottom:-8%;
-  max-width:280px;
+  align-self:flex-start;
+  max-width:300px;
   background:var(--white); color:var(--ink);
   border-radius:var(--r-lg);
   padding:18px 20px;
@@ -325,8 +326,7 @@ ul{margin:0; padding:0; list-style:none;}
 }
 .hero-quote p{font-weight:500;}
 .hero-quote footer{margin-top:10px; font-size:.76rem; color:var(--muted); font-weight:600;}
-@media (max-width:1080px){ .hero-quote{left:auto; right:-2%; bottom:-10%; max-width:250px;} }
-@media (max-width:940px){ .hero-quote{position:static; transform:none; margin:18px auto 0; max-width:400px;} }
+@media (max-width:940px){ .hero-quote{align-self:center; transform:none; max-width:400px;} }
 
 /* ============================================================
    STAT BAR
