@@ -374,8 +374,8 @@ $dino_maps         = dino_opt( 'dino_maps_url', 'https://www.google.com/maps/pla
         </span>
         <div>
           <h3>Hours</h3>
-          <p>Monday to Friday · 9 am to 6 pm<br>Saturday · 10 am to 4 pm</p>
-          <small>Closed Sundays</small>
+          <p>Monday to Friday · 9 am to 6 pm<br>Saturday and Sunday · 10 am to 4 pm</p>
+          <small>Public holidays · 10 am to 4 pm</small>
         </div>
       </div>
 
@@ -460,7 +460,11 @@ $dino_maps         = dino_opt( 'dino_maps_url', 'https://www.google.com/maps/pla
     "opens":"09:00","closes":"18:00"
   },{
     "@type":"OpeningHoursSpecification",
-    "dayOfWeek":["Saturday"],
+    "dayOfWeek":["Saturday","Sunday"],
+    "opens":"10:00","closes":"16:00"
+  },{
+    "@type":"OpeningHoursSpecification",
+    "dayOfWeek":"https://schema.org/PublicHolidays",
     "opens":"10:00","closes":"16:00"
   }],
   "hasMenu":"https://www.ubereats.com/au/store/dino-food-%26-drink/Jf55f-nFShqsC2IZewn_hA",

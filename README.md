@@ -142,7 +142,7 @@ The gradient stays underneath as a fallback, so a missing file never leaves a bl
 ## Before this goes public
 
 - [x] **Trading hours** confirmed by the owners in September 2026: Monday to Friday 9 am to
-      6 pm, Saturday 10 am to 4 pm, closed Sundays. If they change, update two places in
+      6 pm, Saturday, Sunday and public holidays 10 am to 4 pm. If they change, update two places in
       `index.html`: the Visit card and the JSON-LD block near the bottom.
 - [ ] **Google listing hours** may still show the old times. Worth updating there too, since
       that is where most customers look.
