@@ -1,0 +1,28 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "Dino Food & Drink: Menu & Prices demo",
+    "description": "A throwaway WordPress running in the browser, with the Dino theme and its Menu & Prices editor. Nothing here touches the real website.",
+    "author": "Dino Food & Drink"
+  },
+  "landingPage": "/wp-admin/admin.php?page=dino-menu",
+  "preferredVersions": { "php": "8.3", "wp": "latest" },
+  "login": true,
+  "steps": [
+    {
+      "step": "setSiteOptions",
+      "options": { "blogname": "Dino Food & Drink (demo)", "blogdescription": "Menu & Prices demo" }
+    },
+    {
+      "step": "installTheme",
+      "themeData": {
+        "resource": "git:directory",
+        "url": "https://github.com/brobertuy-beep/dino-food-and-drink",
+        "ref": "main",
+        "refType": "branch",
+        "path": "wordpress-theme/dino"
+      },
+      "options": { "activate": true }
+    }
+  ]
+}
