@@ -1,0 +1,91 @@
+/* Menu & Prices editor */
+.dino-menu-admin { max-width: 1120px; }
+.dino-menu-admin [hidden] { display: none !important; }
+.dino-intro { font-size: 15px; margin: 14px 0 4px; }
+.dino-meta { color: #646970; margin-top: 0; }
+
+.dino-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 18px 0; }
+.dino-toolbar label { font-weight: 600; }
+
+.dino-section {
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 0 0 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+}
+.dino-section__head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 14px; }
+.dino-section__head .dino-field--title { flex: 1 1 260px; }
+.dino-section__head .dino-field--title input { font-size: 18px; font-weight: 600; }
+.dino-count { color: #646970; padding-bottom: 8px; }
+.dino-section__actions,
+.dino-item__actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.dino-section__foot { margin-top: 12px; }
+
+.dino-items { margin-top: 8px; }
+.dino-item { border-top: 1px dashed #dcdcde; padding: 12px 0; }
+.dino-item.is-hidden .dino-item__main > .dino-field:not(.dino-field--show) { opacity: .5; }
+.dino-item__main {
+  display: grid;
+  grid-template-columns: minmax(180px, 2.2fr) minmax(90px, 1fr) minmax(150px, 1.4fr) auto auto;
+  gap: 10px 14px;
+  align-items: end;
+}
+
+.dino-field label { display: block; font-weight: 600; font-size: 12px; margin-bottom: 4px; color: #1d2327; }
+.dino-field input[type="text"],
+.dino-field select { width: 100%; max-width: none; }
+.dino-help { margin: 4px 0 0; color: #646970; font-size: 12px; }
+.dino-field--show { padding-bottom: 6px; }
+.dino-field .dino-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dino-more { margin-top: 8px; }
+.dino-more summary { cursor: pointer; color: #2271b1; font-weight: 500; width: max-content; }
+.dino-more__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px 14px;
+  padding: 10px 0 2px;
+}
+
+.dino-btn.is-danger { color: #b32d2e; border-color: #b32d2e; }
+.dino-btn.is-danger:hover { background: #fcf0f1; color: #8a2424; border-color: #8a2424; }
+
+.dino-add-section { margin: 4px 0 8px; }
+
+.dino-savebar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  background: #f0f0f1;
+  border-top: 1px solid #c3c4c7;
+  padding: 12px 0;
+  margin-top: 10px;
+}
+.dino-savebar__status { color: #646970; }
+.dino-savebar__status.is-dirty { color: #b32d2e; font-weight: 600; }
+
+.dino-errors ul { list-style: disc; margin: 4px 0 6px 20px; }
+.dino-history { margin-top: 36px; }
+.dino-history form { margin: 0; }
+
+@media (max-width: 782px) {
+  .dino-item__main { grid-template-columns: 1fr 1fr; }
+  .dino-item__main .dino-field--dish,
+  .dino-item__actions { grid-column: 1 / -1; }
+  .dino-savebar { justify-content: space-between; }
+}

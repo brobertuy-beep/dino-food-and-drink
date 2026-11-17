@@ -5,7 +5,12 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'DINO_VERSION', '1.0.0' );
+// Bump on every release: it is added to script and style URLs, so visitors and
+// GoDaddy's cache fetch the new files instead of an old cached copy.
+define( 'DINO_VERSION', '1.1.0' );
+
+// Menu & Prices admin page, the menu data store and the public menu feed.
+require_once get_template_directory() . '/inc/admin-menu.php';
 
 /** Read a Customizer value, falling back to the default. */
 function dino_opt( $key, $default = '' ) {
@@ -28,17 +33,31 @@ function dino_assets() {
 	);
 	wp_enqueue_style( 'dino-style', get_stylesheet_uri(), array( 'dino-fonts' ), DINO_VERSION );
 
-	// menu.js holds the fallback menu; site.js renders it or the Google Sheet.
+	// menu.js holds the backup menu; site.js fetches the live menu from Menu & Prices.
 	wp_enqueue_script( 'dino-menu', get_theme_file_uri( 'js/menu.js' ), array(), DINO_VERSION, true );
 	wp_enqueue_script( 'dino-site', get_theme_file_uri( 'js/site.js' ), array( 'dino-menu' ), DINO_VERSION, true );
 
-	// A sheet link set in the Customizer wins over the one inside menu.js.
-	$sheet = dino_opt( 'dino_sheet_url', '' );
-	if ( $sheet ) {
-		wp_add_inline_script( 'dino-menu', 'window.DINO_SHEET_URL = ' . wp_json_encode( esc_url_raw( $sheet ) ) . ';', 'after' );
-	}
+	// Where site.js reads the menu saved in Menu & Prices.
+	wp_add_inline_script(
+		'dino-menu',
+		'window.DINO_MENU_API = ' . wp_json_encode( esc_url_raw( rest_url( 'dino/v1/menu' ) ) ) . ';',
+		'after'
+	);
 }
 add_action( 'wp_enqueue_scripts', 'dino_assets' );
+
+/** "Edit menu & prices" shortcut in the black bar at the top, for logged-in owners viewing the site. */
+function dino_admin_bar_link( $bar ) {
+	if ( is_admin() || ! current_user_can( 'edit_pages' ) ) {
+		return;
+	}
+	$bar->add_node( array(
+		'id'    => 'dino-menu',
+		'title' => __( 'Edit menu & prices', 'dino' ),
+		'href'  => admin_url( 'admin.php?page=dino-menu' ),
+	) );
+}
+add_action( 'admin_bar_menu', 'dino_admin_bar_link', 80 );
 
 /**
  * Send the temporary GoDaddy address to the real domain, so the site has one
@@ -81,11 +100,10 @@ function dino_customize( $wp_customize ) {
 	$wp_customize->add_section( 'dino_settings', array(
 		'title'       => __( 'Dino Food & Drink', 'dino' ),
 		'priority'    => 30,
-		'description' => __( 'Menu prices come from the Google Sheet link below. Leave it empty to use the menu stored in the theme.', 'dino' ),
+		'description' => __( 'Dishes and prices are changed under Menu & Prices in the dashboard menu, not here.', 'dino' ),
 	) );
 
 	$fields = array(
-		'dino_sheet_url' => array( 'Google Sheet CSV link', '', 'esc_url_raw' ),
 		'dino_phone'     => array( 'Phone number', '0468 595 689', 'sanitize_text_field' ),
 		'dino_uber_url'  => array( 'Uber Eats link', 'https://www.ubereats.com/au/store/dino-food-&-drink/Jf55f-nFShqsC2IZewn_hA', 'esc_url_raw' ),
 		'dino_maps_url'  => array( 'Google Maps link', 'https://www.google.com/maps/place/Dino+Food+%26+Drink/@-27.4599475,153.0222981,17z', 'esc_url_raw' ),

@@ -1261,7 +1261,31 @@ ul{margin:0; padding:0; list-style:none;}
         return 'menu.js (fallback)';
       });
   }
-  window.DinoMenu = { load: load, parseCSV: parseCSV, sheetToMenu: sheetToMenu };
+
+  // ---------- WordPress "Menu & Prices" admin page (only set when running as the WordPress theme)
+  // The menu is fetched fresh on every visit so a saved price shows straight away, even though
+  // the page itself may be cached. Any failure falls back to the sheet, then to menu.js.
+  function loadApi(api){
+    featuredEl.innerHTML = '<p class="menu-error">Loading menu</p>';
+    listEl.innerHTML = '';
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 8000) : null;
+    var url = api + (api.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now();
+    return fetch(url, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+      .then(function(data){
+        clearTimeout(timer);
+        if (!data || !Array.isArray(data.rows) || data.rows.length < 2) throw new Error('Menu API returned no dishes');
+        if (!renderMenu(sheetToMenu(data.rows))) throw new Error('Could not render menu from the admin page');
+        return 'admin';
+      })
+      .catch(function(err){
+        clearTimeout(timer);
+        if (window.console) console.warn('Menu: admin menu unavailable, falling back.', err);
+        return load(window.DINO_SHEET_URL);
+      });
+  }
+  window.DinoMenu = { load: load, loadApi: loadApi, parseCSV: parseCSV, sheetToMenu: sheetToMenu };
 
   // Sticky header shadow
   var header = document.querySelector('.site-header');
@@ -1273,7 +1297,8 @@ ul{margin:0; padding:0; list-style:none;}
   var y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
 
-  load(window.DINO_SHEET_URL);
+  if (window.DINO_MENU_API) loadApi(window.DINO_MENU_API);
+  else load(window.DINO_SHEET_URL);
   reveal(document);
 })();
 </script>
