@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 // Bump on every release: it is added to script and style URLs, so visitors and
 // GoDaddy's cache fetch the new files instead of an old cached copy.
-define( 'DINO_VERSION', '1.1.0' );
+define( 'DINO_VERSION', '1.1.1' );
 
 // Menu & Prices admin page, the menu data store and the public menu feed.
 require_once get_template_directory() . '/inc/admin-menu.php';

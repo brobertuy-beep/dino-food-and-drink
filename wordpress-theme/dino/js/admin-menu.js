@@ -60,7 +60,7 @@
       h('div', { className: 'dino-item__main' }, [
         field('Dish', 'dish', item.dish, { max: 120 }),
         field('Price', 'price', item.price, { placeholder: 'e.g. $17', max: 40 }),
-        field('Second price', 'price2', item.price2, { placeholder: 'Optional, e.g. 3 for $12', max: 40 }),
+        field('Second price (optional)', 'price2', item.price2, { placeholder: 'e.g. 3 for $12', max: 40 }),
         h('div', { className: 'dino-field dino-field--show' }, [
           h('label', { 'for': showId, className: 'dino-toggle' }, [show, h('span', { text: 'Show on website' })])
         ]),
